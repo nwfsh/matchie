@@ -24,3 +24,32 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Google Translate widget styling */
+#google_translate_element {
+  font-size: 11px;
+}
+
+#google_translate_element .goog-te-gadget {
+  font-size: 11px !important;
+  color: #7a6b52 !important;
+}
+
+#google_translate_element .goog-te-gadget-simple {
+  background: transparent !important;
+  border: 1px solid #c8b898 !important;
+  border-radius: 20px !important;
+  padding: 3px 10px !important;
+  font-size: 11px !important;
+}
+
+#google_translate_element .goog-te-gadget-simple span {
+  color: #7a6b52 !important;
+}
+
+#google_translate_element .goog-te-gadget-simple .goog-te-menu-value span {
+  color: #7a6b52 !important;
+}
+
+.goog-te-banner-frame { display: none !important; }
+body { top: 0 !important; }
