@@ -243,6 +243,7 @@ export default function Quiz() {
                         }
                         value={(answers[`${q.id}_extra`] as string) || ''}
                         onChange={e => setAnswers({ ...answers, [`${q.id}_extra`]: e.target.value })}
+                        className={styles.extraInput}
                         style={{
                             width: '100%', padding: '0.75rem 1rem',
                             borderRadius: '12px', border: '1.5px solid #eee',
