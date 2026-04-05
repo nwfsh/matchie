@@ -10,6 +10,7 @@ const questions = [
         question: 'What kind of cause speaks to you?',
         hint: 'Pick all that apply',
         multi: true,
+        allowExtra: true,
         options: [
             { value: 'people', label: 'Helping people', sub: 'Seniors, kids, families, newcomers' },
             { value: 'environment', label: 'Environment', sub: 'Nature, animals, sustainability' },
@@ -22,7 +23,8 @@ const questions = [
         id: 'goal',
         question: 'What do you most want to get out of this?',
         hint: 'Be honest — there are no wrong answers',
-        multi: false,
+        multi: true,
+        allowExtra: true,
         options: [
             { value: 'hours', label: 'Grad hours', sub: 'Hit my graduation requirement' },
             { value: 'resume', label: 'Resume & uni apps', sub: 'Stand out for applications' },
@@ -35,6 +37,7 @@ const questions = [
         question: 'What kind of vibe are you looking for?',
         hint: 'Pick one that feels most like you',
         multi: false,
+        allowExtra: false,
         options: [
             { value: 'chill', label: 'Chill & low-key', sub: 'Easy pace, no pressure' },
             { value: 'moderate', label: 'Somewhere in between', sub: 'Steady and manageable' },
@@ -46,6 +49,7 @@ const questions = [
         question: 'How do you like to work?',
         hint: 'Pick one that feels most like you',
         multi: false,
+        allowExtra: false,
         options: [
             { value: 'solo', label: 'On my own', sub: 'Independent, self-directed' },
             { value: 'small', label: 'Small group', sub: 'A few people, close-knit' },
@@ -57,6 +61,7 @@ const questions = [
         question: 'What kind of tasks sound like you?',
         hint: 'Pick one that feels most like you',
         multi: false,
+        allowExtra: false,
         options: [
             { value: 'people', label: 'Talking & helping', sub: 'Working directly with people' },
             { value: 'creative', label: 'Creative stuff', sub: 'Art, design, content, media' },
@@ -69,6 +74,7 @@ const questions = [
         question: 'What skills do you want to build?',
         hint: 'Pick all that apply',
         multi: true,
+        allowExtra: true,
         options: [
             { value: 'communication', label: 'Communication', sub: 'Speaking, listening, presenting' },
             { value: 'leadership', label: 'Leadership', sub: 'Taking initiative, guiding others' },
@@ -82,6 +88,7 @@ const questions = [
         id: 'availability',
         question: 'When are you usually free?',
         hint: 'Pick all that apply',
+        allowExtra: true,
         multi: true,
         options: [
             { value: 'weekends', label: 'Weekends', sub: 'Saturdays and/or Sundays' },
@@ -94,6 +101,7 @@ const questions = [
         id: 'onboarding',
         question: 'How do you feel about training before you start?',
         hint: 'Be honest — orgs want to match your style',
+        allowExtra: false,
         multi: false,
         options: [
             { value: 'jump-in', label: 'Just throw me in', sub: "I'll figure it out as I go" },
@@ -122,6 +130,8 @@ export default function Quiz() {
     const singleSelected: string | null = !q.multi ? (currentAnswer as string) || null : null
     const hasSelection = q.multi ? multiSelected.length > 0 : singleSelected !== null
     const progress = ((current + (hasSelection ? 1 : 0)) / questions.length) * 100
+
+    
 
     const handleSelect = (value: string) => {
         if (q.multi) {
@@ -223,6 +233,26 @@ export default function Quiz() {
                         </button>
                     ))}
                 </div>
+                {q.allowExtra && (
+                    <textarea
+                        placeholder={
+                            q.id === 'cause' ? "e.g. I worked at an animal shelter, care about food waste..." :
+                                q.id === 'goal' ? "e.g. I want to be a nurse and need patient-facing hours..." :
+                                    q.id === 'skills' ? "e.g. I already know Figma, want to use it in a real project..." :
+                                        "Anything else to add?"
+                        }
+                        value={(answers[`${q.id}_extra`] as string) || ''}
+                        onChange={e => setAnswers({ ...answers, [`${q.id}_extra`]: e.target.value })}
+                        className={styles.extraInput}
+                        style={{
+                            width: '100%', padding: '0.75rem 1rem',
+                            borderRadius: '12px', border: '1.5px solid #eee',
+                            fontSize: '0.85rem', resize: 'none', height: '80px',
+                            outline: 'none', fontFamily: 'inherit', color: '#333',
+                            boxSizing: 'border-box', marginTop: '0.75rem',
+                        }}
+                    />
+                )}
 
                 {error && <p className={styles.error}>{error}</p>}
 
@@ -231,7 +261,7 @@ export default function Quiz() {
                     onClick={handleNext}
                     disabled={!hasSelection || loading}
                 >
-                    {isLast ? (loading ? 'Saving...' : 'Show my matches 🎯') : 'Next →'}
+                    {isLast ? (loading ? 'Saving...' : 'Show my matches ') : 'Next →'}
                 </button>
 
                 <div className={styles.dots}>
