@@ -18,7 +18,7 @@ export default function Home() {
             <p style={{ color: 'gray', marginBottom: '2rem' }}>
                 Volunteer matching for BC students
             </p>
-            <SignIn forceRedirectUrl="/onboarding" />
+            <SignIn forceRedirectUrl="/role" />
         </main>
     )
 }
