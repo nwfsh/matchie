@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import styles from './dashboard.module.css'
+import styles from './opportunity.module.css'
 
 const OPPORTUNITIES = [
     {

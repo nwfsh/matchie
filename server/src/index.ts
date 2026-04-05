@@ -5,7 +5,8 @@ import { connectDB } from "./config/db";
 import opportunityRoutes from "./routes/opportunityRoutes";
 import studentProfileRoutes from "./routes/studentProfileRoutes";
 import studentQuizRoutes from "./routes/studentQuizRoutes";
-import voiceRoutes from "./routes/voiceRoutes"; // ← new
+import voiceRoutes from "./routes/voiceRoutes"; 
+import matchingRoutes from "./routes/matchingRoutes";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/opportunities", opportunityRoutes);
 app.use("/api/opportunities", voiceRoutes);       // ← new: POST /api/opportunities/voice
 app.use("/api/students/profile", studentProfileRoutes);
 app.use("/api/students/quiz", studentQuizRoutes);
+app.use("/api/matching", matchingRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
