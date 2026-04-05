@@ -13,7 +13,7 @@ const router = express.Router()
 const upload = multer({ dest: "uploads/" })
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-// ── Parse transcript into structured opportunity fields via Groq ──────────────
+// Parse transcript into structured opportunity fields via Groq 
 async function parseTranscriptWithGroq(transcript: string) {
   const completion = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
@@ -58,7 +58,7 @@ Return exactly this JSON shape:
   }
 }
 
-// ── POST /api/opportunities/voice ─────────────────────────────────────────────
+// POST /api/opportunities/voice 
 router.post("/voice", upload.single("audio"), async (req, res) => {
   let renamedPath: string | null = null
 
@@ -138,10 +138,8 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
   }
   
 })
-// Add this route to your existing opportunityRoutes file, just before `export default router`
-// It reuses parseTranscriptWithGroq since text and transcript are treated identically.
 
-// ── POST /api/opportunities/text ──────────────────────────────────────────────
+// POST /api/opportunities/text 
 router.post("/text", async (req, res) => {
   try {
     const { description } = req.body
