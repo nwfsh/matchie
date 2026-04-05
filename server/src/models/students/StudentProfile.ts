@@ -9,6 +9,12 @@ export interface IStudentProfile extends Document {
     hoursPerYear?: number
     createdAt: Date
     updatedAt: Date
+    clerkId: {
+        type: String,
+        required: true,
+        unique: true,  
+        index: true,
+    },
 }
 
 const StudentProfileSchema = new Schema<IStudentProfile>(
@@ -50,8 +56,10 @@ const StudentProfileSchema = new Schema<IStudentProfile>(
 
 // No indexes needed — this collection is only ever fetched by _id for dashboard display
 
+
 const StudentProfile: Model<IStudentProfile> =
     mongoose.models.StudentProfile ??
     mongoose.model<IStudentProfile>('StudentProfile', StudentProfileSchema)
 
 export default StudentProfile
+
