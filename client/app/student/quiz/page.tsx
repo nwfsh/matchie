@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useUser } from '@clerk/nextjs'
 import styles from './quiz.module.css'
 
 const questions = [
@@ -107,25 +108,19 @@ type Answers = Record<string, string | string[]>
 
 export default function Quiz() {
     const router = useRouter()
+    const { user } = useUser()
     const [current, setCurrent] = useState(0)
     const [answers, setAnswers] = useState<Answers>({})
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     const q = questions[current]
     const isLast = current === questions.length - 1
 
-    // Derive current selection from answers
     const currentAnswer = answers[q.id]
-    const multiSelected: string[] = q.multi
-        ? (currentAnswer as string[]) || []
-        : []
-    const singleSelected: string | null = !q.multi
-        ? (currentAnswer as string) || null
-        : null
-
-    const hasSelection = q.multi
-        ? multiSelected.length > 0
-        : singleSelected !== null
-
+    const multiSelected: string[] = q.multi ? (currentAnswer as string[]) || [] : []
+    const singleSelected: string | null = !q.multi ? (currentAnswer as string) || null : null
+    const hasSelection = q.multi ? multiSelected.length > 0 : singleSelected !== null
     const progress = ((current + (hasSelection ? 1 : 0)) / questions.length) * 100
 
     const handleSelect = (value: string) => {
@@ -145,11 +140,38 @@ export default function Quiz() {
         return singleSelected === value
     }
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (!hasSelection) return
+
         if (isLast) {
-            localStorage.setItem('quizAnswers', JSON.stringify(answers))
-            router.push('/student/dashboard')
+            if (!user) return
+            setLoading(true)
+            setError(null)
+
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/students/quiz`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        clerkId: user.id,
+                        ...answers,
+                    }),
+                })
+
+                const data = await res.json()
+
+                if (!res.ok) {
+                    setError(data.error || 'Something went wrong')
+                    return
+                }
+
+                router.push('/student/dashboard')
+
+            } catch (err) {
+                setError('Could not connect to server')
+            } finally {
+                setLoading(false)
+            }
         } else {
             setCurrent(current + 1)
         }
@@ -166,12 +188,10 @@ export default function Quiz() {
     return (
         <main className={styles.page}>
 
-            {/* Progress bar */}
             <div className={styles.progressTrack}>
                 <div className={styles.progressFill} style={{ width: `${progress}%` }} />
             </div>
 
-            {/* Nav row */}
             <div className={styles.nav}>
                 <button className={styles.backBtn} onClick={handleBack}>← Back</button>
                 <span className={styles.stepCount}>{current + 1} / {questions.length}</span>
@@ -180,13 +200,10 @@ export default function Quiz() {
             <div className={styles.card}>
                 <h1 className={styles.question}>{q.question}</h1>
                 <p className={styles.hint}>
-                    {q.multi && (
-                        <span className={styles.multiTag}>Multi-select · </span>
-                    )}
+                    {q.multi && <span className={styles.multiTag}>Multi-select · </span>}
                     {q.hint}
                 </p>
 
-                {/* Options */}
                 <div className={styles.options}>
                     {q.options.map(opt => (
                         <button
@@ -207,16 +224,16 @@ export default function Quiz() {
                     ))}
                 </div>
 
-                {/* Next button */}
+                {error && <p className={styles.error}>{error}</p>}
+
                 <button
-                    className={`${styles.nextBtn} ${hasSelection ? styles.active : styles.inactive}`}
+                    className={`${styles.nextBtn} ${hasSelection && !loading ? styles.active : styles.inactive}`}
                     onClick={handleNext}
-                    disabled={!hasSelection}
+                    disabled={!hasSelection || loading}
                 >
-                    {isLast ? 'Show my matches 🎯' : 'Next →'}
+                    {isLast ? (loading ? 'Saving...' : 'Show my matches 🎯') : 'Next →'}
                 </button>
 
-                {/* Dot indicators */}
                 <div className={styles.dots}>
                     {questions.map((_, i) => (
                         <div

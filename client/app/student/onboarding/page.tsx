@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useUser } from '@clerk/nextjs'
 import styles from './onboarding.module.css'
 
 type FormState = {
@@ -23,7 +24,10 @@ const INITIAL_FORM: FormState = {
 
 export default function Onboarding() {
     const router = useRouter()
+    const { user } = useUser()
     const [form, setForm] = useState<FormState>(INITIAL_FORM)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -31,10 +35,42 @@ export default function Onboarding() {
 
     const canProceed = form.name.trim() !== '' && form.age !== ''
 
-    const handleSubmit = () => {
-        if (!canProceed) return
-        localStorage.setItem('studentProfile', JSON.stringify(form))
-        router.push('/student/quiz')
+    const handleSubmit = async () => {
+        if (!canProceed || !user) return
+        setLoading(true)
+        setError(null)
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/students/profile`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    clerkId: user.id,
+                    name: form.name,
+                    age: Number(form.age),
+                    school: form.school,
+                    language: form.language,
+                    experience: form.experience,
+                    hoursPerYear: form.hoursPerYear ? Number(form.hoursPerYear) : undefined,
+                }),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                setError(data.error || 'Something went wrong')
+                return
+            }
+
+            // Store profileId for quiz to use
+            localStorage.setItem('profileId', data.profileId)
+            router.push('/student/quiz')
+
+        } catch (err) {
+            setError('Could not connect to server')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -131,7 +167,7 @@ export default function Onboarding() {
                     </div>
 
                     <div className={styles.field}>
-                        <label className={styles.label}>Hours you want to aim for volunteering this year </label>
+                        <label className={styles.label}>Hours you want to aim for volunteering this year</label>
                         <input
                             className={styles.input}
                             name="hoursPerYear"
@@ -144,12 +180,14 @@ export default function Onboarding() {
 
                 </div>
 
+                {error && <p className={styles.error}>{error}</p>}
+
                 <button
-                    className={`${styles.submitBtn} ${canProceed ? styles.active : styles.disabled}`}
+                    className={`${styles.submitBtn} ${canProceed && !loading ? styles.active : styles.disabled}`}
                     onClick={handleSubmit}
-                    disabled={!canProceed}
+                    disabled={!canProceed || loading}
                 >
-                    Next: Take the Quiz →
+                    {loading ? 'Saving...' : 'Next: Take the Quiz →'}
                 </button>
             </div>
 

@@ -181,3 +181,10 @@
 .loginNote a:hover {
     text-decoration: underline;
 }
+
+.error {
+    color: #e07a3a;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}

@@ -37,7 +37,7 @@ router.post('/', async (req: Request, res: Response) => {
                 onboarding,
                 completedAt: new Date(),
             },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         )
 
         return res.status(201).json({ quizId: quiz._id })
