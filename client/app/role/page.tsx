@@ -1,43 +1,49 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useClerk } from '@clerk/nextjs'
+import styles from './role.module.css'
 
 export default function RolePage() {
     const router = useRouter()
     const { signOut } = useClerk()
 
     return (
-        <main style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            padding: '2rem'
-        }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-                Matchie 🤝
-            </h1>
-            <p style={{ color: 'gray', marginBottom: '3rem' }}>Who are you?</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '400px' }}>
-                <button
-                    onClick={() => router.push('/student/onboarding')}
-                    style={{ padding: '1.2rem', fontSize: '1.1rem', backgroundColor: 'black', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
-                >
-                    🎒 I'm a Student
-                </button>
-                <button
-                    onClick={() => router.push('/nonprofit/upload')}
-                    style={{ padding: '1.2rem', fontSize: '1.1rem', backgroundColor: 'white', color: 'black', border: '2px solid black', borderRadius: '8px', cursor: 'pointer' }}
-                >
-                    🏢 I'm a Nonprofit
-                </button>
-                <button
-                    onClick={() => signOut(() => router.push('/'))}
-                    style={{ padding: '0.8rem', fontSize: '0.9rem', backgroundColor: 'transparent', color: 'gray', border: 'none', cursor: 'pointer', marginTop: '1rem' }}
-                >
-                    Sign out
-                </button>
+        <main className={styles.page}>
+            <div className={styles.blobGreen} />
+            <div className={styles.blobOrange} />
+            <div className={styles.center}>
+
+                <div className={styles.heading}>
+                    <img src="icon.png" alt="logo" width={300} height={300} />
+                    <h1 className={styles.title}>Welcome to Matchie!</h1>
+                    <p className={styles.subtitle}>Are you a student or a non-profit organisation?</p>
+                </div>
+
+                <div className={styles.buttons}>
+                    <button
+                        className={styles.btnStudent}
+                        onClick={() => router.push('/student/onboarding')}
+                    >
+                        <span>Student</span>
+                        <span>›</span>
+                    </button>
+
+                    <button
+                        className={styles.btnNgo}
+                        onClick={() => router.push('/nonprofit/upload')}
+                    >
+                        <span>NGO</span>
+                        <span>›</span>
+                    </button>
+
+                    <button
+                        className={styles.btnSignOut}
+                        onClick={() => signOut(() => router.push('/'))}
+                    >
+                        Sign out
+                    </button>
+                </div>
+
             </div>
         </main>
     )

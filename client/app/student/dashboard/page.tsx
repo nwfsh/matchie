@@ -1,362 +1,357 @@
-// 'use client'
-// import { useRouter } from 'next/navigation'
-
-// const OPPORTUNITIES = [
-//     {
-//         id: '1',
-//         title: 'Food Bank Sorting Crew',
-//         org: 'Vancouver Food Bank',
-//         category: 'Community',
-//         location: 'Vancouver, BC',
-//         hours: '3 hrs/week',
-//         urgent: true,
-//         spotsLeft: 3,
-//         vibe: 'Chill · Small group · Behind the scenes',
-//         description: 'Sort and pack food donations for families in need. No experience needed.',
-//     },
-//     {
-//         id: '2',
-//         title: 'Youth Soccer Coach Helper',
-//         org: 'Richmond Youth Sports',
-//         category: 'Sports & Rec',
-//         location: 'Richmond, BC',
-//         hours: '4 hrs/weekend',
-//         urgent: false,
-//         spotsLeft: 8,
-//         vibe: 'High energy · Big group · People-facing',
-//         description: 'Assist coaches during weekend soccer sessions for kids aged 6–12.',
-//     },
-//     {
-//         id: '3',
-//         title: 'Social Media & Design Volunteer',
-//         org: 'BC Wildlife Federation',
-//         category: 'Environment',
-//         location: 'Remote',
-//         hours: '2–4 hrs/week',
-//         urgent: false,
-//         spotsLeft: 2,
-//         vibe: 'Creative · Solo · Flexible',
-//         description: 'Create graphics and posts for environmental campaigns. Work from home.',
-//     },
-//     {
-//         id: '4',
-//         title: 'Senior Companion Visitor',
-//         org: 'Burnaby Seniors Centre',
-//         category: 'Health & Wellness',
-//         location: 'Burnaby, BC',
-//         hours: '2 hrs/week',
-//         urgent: true,
-//         spotsLeft: 5,
-//         vibe: 'Chill · One-on-one · People-facing',
-//         description: 'Visit seniors who don\'t get many visitors. Low-pressure and meaningful.',
-//     },
-//     {
-//         id: '5',
-//         title: 'Event Setup & Logistics Crew',
-//         org: 'Multicultural Helping House',
-//         category: 'Culture & Events',
-//         location: 'Surrey, BC',
-//         hours: 'Flexible, event-based',
-//         urgent: false,
-//         spotsLeft: 12,
-//         vibe: 'Fast-paced · Big group · Hands-on',
-//         description: 'Help set up community cultural events. Rack up hours fast and meet new people.',
-//     },
-// ]
-
-// export default function Dashboard() {
-//     const router = useRouter()
-//     const hoursCompleted = 12
-//     const hoursGoal = 30
-//     const pct = Math.round((hoursCompleted / hoursGoal) * 100)
-
-//     return (
-//         <main style={{ minHeight: '100vh', backgroundColor: '#f7f7f7', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-//             {/* Progress bar — step 3 of 4 */}
-//             <div style={{ width: '100%', height: '3px', backgroundColor: '#e5e5e5' }}>
-//                 <div style={{ width: '75%', height: '100%', backgroundColor: '#000' }} />
-//             </div>
-
-//             <div style={{ width: '100%', maxWidth: '480px', padding: '2rem 1.5rem 4rem' }}>
-
-//                 {/* Header */}
-//                 <h1 style={{ fontSize: '1.6rem', fontWeight: '800', marginBottom: '0.2rem' }}>Your matches 🎯</h1>
-//                 <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Picked based on your vibe answers.</p>
-
-//                 {/* Hours tracker */}
-//                 <div style={{
-//                     backgroundColor: '#fff',
-//                     borderRadius: '12px',
-//                     padding: '1.2rem 1.3rem',
-//                     marginBottom: '1.5rem',
-//                     border: '1px solid #eee',
-//                 }}>
-//                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
-//                         <span style={{ fontWeight: '700', fontSize: '0.9rem' }}>Volunteer hours</span>
-//                         <span style={{ fontWeight: '800', fontSize: '0.95rem' }}>{hoursCompleted} / {hoursGoal} hrs</span>
-//                     </div>
-//                     <div style={{ backgroundColor: '#f0f0f0', borderRadius: '999px', height: '8px', overflow: 'hidden' }}>
-//                         <div style={{
-//                             width: `${pct}%`,
-//                             height: '100%',
-//                             backgroundColor: '#000',
-//                             borderRadius: '999px',
-//                         }} />
-//                     </div>
-//                     <p style={{ fontSize: '0.78rem', color: '#aaa', marginTop: '0.5rem', margin: '0.5rem 0 0' }}>
-//                         {hoursGoal - hoursCompleted} more hours to graduate 🎓
-//                     </p>
-//                 </div>
-
-//                 {/* Filter tabs */}
-//                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.2rem' }}>
-//                     {['All', 'Urgent', 'Remote'].map((tab, i) => (
-//                         <button key={tab} style={{
-//                             padding: '0.45rem 1rem',
-//                             borderRadius: '999px',
-//                             border: i === 0 ? '2px solid #000' : '1.5px solid #ddd',
-//                             backgroundColor: i === 0 ? '#000' : '#fff',
-//                             color: i === 0 ? '#fff' : '#666',
-//                             fontSize: '0.82rem',
-//                             fontWeight: '600',
-//                             cursor: 'pointer',
-//                         }}>
-//                             {tab}
-//                         </button>
-//                     ))}
-//                 </div>
-
-//                 {/* Cards */}
-//                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-//                     {OPPORTUNITIES.map(opp => (
-//                         <div
-//                             key={opp.id}
-//                             onClick={() => router.push(`/student/opportunity/${opp.id}`)}
-//                             style={{
-//                                 backgroundColor: '#fff',
-//                                 borderRadius: '12px',
-//                                 padding: '1.2rem 1.3rem',
-//                                 border: '1px solid #eee',
-//                                 cursor: 'pointer',
-//                             }}
-//                         >
-//                             {/* Top row */}
-//                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-//                                 <div style={{ flex: 1 }}>
-//                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
-//                                         {opp.urgent && (
-//                                             <span style={{
-//                                                 fontSize: '0.68rem', fontWeight: '700',
-//                                                 backgroundColor: '#fef3c7', color: '#92400e',
-//                                                 padding: '0.15rem 0.5rem', borderRadius: '999px',
-//                                             }}>
-//                                                 Urgent
-//                                             </span>
-//                                         )}
-//                                         <span style={{ fontSize: '0.72rem', color: '#aaa', fontWeight: '600' }}>{opp.category}</span>
-//                                     </div>
-//                                     <h3 style={{ fontSize: '1rem', fontWeight: '700', margin: '0 0 0.1rem' }}>{opp.title}</h3>
-//                                     <p style={{ fontSize: '0.82rem', color: '#888', margin: 0 }}>{opp.org}</p>
-//                                 </div>
-//                                 <span style={{ color: '#ccc', fontSize: '1rem', marginLeft: '0.5rem' }}>→</span>
-//                             </div>
-
-//                             {/* Description */}
-//                             <p style={{ fontSize: '0.83rem', color: '#555', margin: '0.7rem 0 0.6rem', lineHeight: 1.5 }}>
-//                                 {opp.description}
-//                             </p>
-
-//                             {/* Meta */}
-//                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.6rem' }}>
-//                                 <span style={{ fontSize: '0.76rem', color: '#888' }}>📍 {opp.location}</span>
-//                                 <span style={{ fontSize: '0.76rem', color: '#888' }}>⏱ {opp.hours}</span>
-//                                 <span style={{ fontSize: '0.76rem', color: '#888' }}>👤 {opp.spotsLeft} spots</span>
-//                             </div>
-
-//                             {/* Vibe tag */}
-//                             <span style={{
-//                                 fontSize: '0.75rem', color: '#666',
-//                                 backgroundColor: '#f5f5f5',
-//                                 padding: '0.3rem 0.7rem',
-//                                 borderRadius: '6px',
-//                                 display: 'inline-block',
-//                             }}>
-//                                 ✨ {opp.vibe}
-//                             </span>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-//         </main>
-//     )
-// }
 'use client'
+
+import styles from './dashboard.module.css'
+import { useDashboard } from './useDashboard'
+import type { Certificate } from './useDashboard'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 
+// ── Types ─────────────────────────────────────────────────────────────────────
+
 interface Opportunity {
-  _id: string
-  title: string
-  causeArea: string
-  description: string
-  requiredSkills: string[]
-  commitmentType: string
-  location: string
-  isRemote: boolean
+    _id: string
+    title: string
+    causeArea: string
+    description: string
+    requiredSkills: string[]
+    commitmentType: string
+    location: string
+    isRemote: boolean
 }
-
-interface Match {
-  opportunity: Opportunity
-  matchPercentage: number
-  reason: string
-}
-
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
-export default function Dashboard() {
-  const router = useRouter()
-  const { user, isLoaded } = useUser()
-  const [matches, setMatches] = useState<Match[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
-  const hoursCompleted = 12
-  const hoursGoal = 30
-  const pct = Math.round((hoursCompleted / hoursGoal) * 100)
+interface Match {
+    opportunity: Opportunity
+    matchPercentage: number
+    reason: string
+}
 
-  useEffect(() => {
-    if (!isLoaded || !user) return
-    const fetchMatches = async () => {
-      try {
-        const res = await fetch(`${API}/api/matching/${user.id}`)
-        const data = await res.json()
-        if (!res.ok) { setError(data.error || 'Failed to load matches'); return }
-        setMatches(data.matches || [])
-      } catch {
-        setError('Could not connect to server.')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchMatches()
-  }, [isLoaded, user])
+interface ActivityItem {
+    color: string
+    title: string
+    org: string
+    date: string
+    hours: string
+}
 
-  return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#f7f7f7', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+// ── Static data ───────────────────────────────────────────────────────────────
 
-      {/* Progress bar */}
-      <div style={{ width: '100%', height: '3px', backgroundColor: '#e5e5e5' }}>
-        <div style={{ width: '75%', height: '100%', backgroundColor: '#000' }} />
-      </div>
+const ACTIVITY: ActivityItem[] = [
+    { color: '#A1C280', title: 'Community Garden Helper', org: 'Green Thumbs Youth', date: 'Mar 28', hours: '3h' },
+    { color: '#F4873E', title: 'Food Bank Sorting', org: 'City Food Pantry', date: 'Mar 20', hours: '4h' },
+    { color: '#7091A9', title: 'Reading Buddy Program', org: 'Little Readers Club', date: 'Mar 14', hours: '2h' },
+]
 
-      <div style={{ width: '100%', maxWidth: '480px', padding: '2rem 1.5rem 4rem' }}>
+const LOCKED_CERTS = [
+    { title: 'Community Champion', earned: false },
+    { title: 'Super Volunteer', earned: false },
+    { title: 'Impact Leader', earned: false },
+]
 
-        <h1 style={{ fontSize: '1.6rem', fontWeight: '800', marginBottom: '0.2rem' }}>Your matches 🎯</h1>
-        <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Matched by personality, energy and interests — not just skills.</p>
+// ── Icons ─────────────────────────────────────────────────────────────────────
 
-        {/* Hours tracker */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '1.2rem 1.3rem', marginBottom: '1.5rem', border: '1px solid #eee' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
-            <span style={{ fontWeight: '700', fontSize: '0.9rem' }}>Volunteer hours</span>
-            <span style={{ fontWeight: '800', fontSize: '0.95rem' }}>{hoursCompleted} / {hoursGoal} hrs</span>
-          </div>
-          <div style={{ backgroundColor: '#f0f0f0', borderRadius: '999px', height: '8px', overflow: 'hidden' }}>
-            <div style={{ width: `${pct}%`, height: '100%', backgroundColor: '#000', borderRadius: '999px' }} />
-          </div>
-          <p style={{ fontSize: '0.78rem', color: '#aaa', margin: '0.5rem 0 0' }}>
-            {hoursGoal - hoursCompleted} more hours to graduate 🎓
-          </p>
-        </div>
+function IconFlame() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2s3 2.5 3 5.5a3 3 0 0 1-6 0C5 5.5 6 4 6 4s-.5 2 1 3c.5-1.5 1-5 1-5z" stroke="#F4873E" strokeWidth="1.3" strokeLinejoin="round" />
+        </svg>
+    )
+}
 
-        {/* Loading */}
-        {loading && (
-          <div style={{ textAlign: 'center', padding: '3rem 0' }}>
-            <p style={{ color: '#aaa', fontSize: '0.9rem' }}>Finding your personality matches…</p>
-            <p style={{ color: '#ccc', fontSize: '0.78rem', marginTop: '0.3rem' }}>This takes a few seconds ✨</p>
-          </div>
-        )}
+function IconCalendar() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2.5" y="3.5" width="15" height="14" rx="2" stroke="#F4873E" strokeWidth="1.5" />
+            <path d="M6.5 1.5v4M13.5 1.5v4M2.5 8.5h15" stroke="#F4873E" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    )
+}
 
-        {/* Error */}
-        {!loading && error && (
-          <div style={{ backgroundColor: '#fff1f0', border: '1px solid #ffd6d6', borderRadius: '12px', padding: '1.2rem', color: '#cc0000', fontSize: '0.85rem' }}>
-            {error}
-          </div>
-        )}
+function IconAward({ color = '#D99D26' }: { color?: string }) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="8" r="5" stroke={color} strokeWidth="1.5" />
+            <path d="M6.5 12.5l-1 6 4.5-2 4.5 2-1-6" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+    )
+}
 
-        {/* Empty */}
-        {!loading && !error && matches.length === 0 && (
-          <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center', border: '1px solid #eee', color: '#888' }}>
-            No opportunities available yet. Check back soon!
-          </div>
-        )}
+function IconClock({ color = '#A59A92' }: { color?: string }) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7.5" stroke={color} strokeWidth="1.5" />
+            <path d="M10 6v4l2.5 2.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    )
+}
 
-        {/* Match cards */}
-        {!loading && !error && matches.length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-            {matches.map(({ opportunity: opp, matchPercentage, reason }, index) => {
-              const barColor = matchPercentage >= 75 ? '#16a34a' : matchPercentage >= 50 ? '#2563eb' : '#888'
+function IconTrophy({ color = '#F4873E' }: { color?: string }) {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M6 3h8v6a4 4 0 0 1-8 0V3z" stroke={color} strokeWidth="1.5" />
+            <path d="M3 4h3v4a1.5 1.5 0 0 1-3 0V4zM17 4h-3v4a1.5 1.5 0 0 0 3 0V4z" stroke={color} strokeWidth="1.5" />
+            <path d="M10 13v3M7 16h6" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    )
+}
 
-              return (
-                <div
-                  key={opp._id}
-                  onClick={() => router.push(`/student/opportunity/${opp._id}`)}
-                  style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '1.2rem 1.3rem', border: '1px solid #eee', cursor: 'pointer' }}
-                >
-                  {/* Header row */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
-                        {index === 0 && (
-                          <span style={{ fontSize: '0.68rem', fontWeight: '700', backgroundColor: '#fef3c7', color: '#92400e', padding: '0.15rem 0.5rem', borderRadius: '999px' }}>
-                            🏆 Best match
-                          </span>
-                        )}
-                        <span style={{ fontSize: '0.72rem', color: '#aaa', fontWeight: '600' }}>{opp.causeArea}</span>
-                      </div>
-                      <h3 style={{ fontSize: '1rem', fontWeight: '700', margin: '0 0 0.1rem' }}>{opp.title}</h3>
-                      <p style={{ fontSize: '0.82rem', color: '#888', margin: 0 }}>
-                        {opp.location} · {opp.commitmentType}{opp.isRemote ? ' · Remote' : ''}
-                      </p>
-                    </div>
+function IconArrowRight() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="#FFFFFF" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    )
+}
 
-                    {/* Percentage */}
-                    <div style={{ textAlign: 'right', marginLeft: '0.8rem' }}>
-                      <span style={{ fontSize: '1.3rem', fontWeight: '800', color: barColor }}>{matchPercentage}%</span>
-                      <p style={{ fontSize: '0.7rem', color: '#aaa', margin: 0 }}>match</p>
-                    </div>
-                  </div>
+function IconSearch() {
+    return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="#F4873E" strokeWidth="2" />
+            <path d="M16 16l4 4" stroke="#F4873E" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    )
+}
 
-                  {/* Match bar */}
-                  <div style={{ backgroundColor: '#f0f0f0', borderRadius: '999px', height: '5px', margin: '0.8rem 0 0.6rem', overflow: 'hidden' }}>
-                    <div style={{ width: `${matchPercentage}%`, height: '100%', backgroundColor: barColor, borderRadius: '999px' }} />
-                  </div>
+function IconMapPin() {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1a3.5 3.5 0 0 1 3.5 3.5C9.5 7.5 6 11 6 11S2.5 7.5 2.5 4.5A3.5 3.5 0 0 1 6 1z" stroke="#A59A92" strokeWidth="1" />
+            <circle cx="6" cy="4.5" r="1" stroke="#A59A92" strokeWidth="1" />
+        </svg>
+    )
+}
 
-                  {/* AI reason */}
-                  <div style={{ backgroundColor: '#f9f9f9', borderRadius: '8px', padding: '0.5rem 0.8rem', marginBottom: '0.7rem' }}>
-                    <p style={{ fontSize: '0.78rem', color: '#555', margin: 0 }}>✨ {reason}</p>
-                  </div>
+function IconCalSmall() {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <rect x="1" y="2" width="10" height="9" rx="1.5" stroke="#A59A92" strokeWidth="1" />
+            <path d="M4 1v2M8 1v2M1 5h10" stroke="#A59A92" strokeWidth="1" strokeLinecap="round" />
+        </svg>
+    )
+}
 
-                  {/* Description */}
-                  <p style={{ fontSize: '0.83rem', color: '#555', margin: '0 0 0.6rem', lineHeight: 1.5 }}>{opp.description}</p>
+function IconPeople() {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="4.5" cy="3.5" r="2" stroke="#A59A92" strokeWidth="1" />
+            <path d="M1 10.5c0-2 1.6-3.5 3.5-3.5" stroke="#A59A92" strokeWidth="1" strokeLinecap="round" />
+            <circle cx="8.5" cy="3.5" r="2" stroke="#A59A92" strokeWidth="1" />
+            <path d="M11 10.5c0-2-1.6-3.5-3.5-3.5" stroke="#A59A92" strokeWidth="1" strokeLinecap="round" />
+        </svg>
+    )
+}
 
-                  {/* Skills */}
-                  {opp.requiredSkills.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                      {opp.requiredSkills.map(s => (
-                        <span key={s} style={{ fontSize: '0.72rem', color: '#3b5bdb', backgroundColor: '#eef2ff', padding: '0.2rem 0.6rem', borderRadius: '999px' }}>
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+function IconCheck() {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" stroke="#A1C280" strokeWidth="1" />
+            <path d="M3.5 6l2 2 3-3" stroke="#A1C280" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    )
+}
+
+function IconLockSmall() {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <rect x="2" y="5.5" width="8" height="5.5" rx="1" stroke="#A59A92" strokeWidth="1" />
+            <path d="M4 5.5V4a2 2 0 0 1 4 0v1.5" stroke="#A59A92" strokeWidth="1" strokeLinecap="round" />
+        </svg>
+    )
+}
+
+function IconLock() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="3" y="7.5" width="10" height="7" rx="1.5" stroke="#A59A92" strokeWidth="1.3" />
+            <path d="M5 7.5V5a3 3 0 0 1 6 0v2.5" stroke="#A59A92" strokeWidth="1.3" strokeLinecap="round" />
+        </svg>
+    )
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+
+export default function DashboardPage() {
+    const { firstName, hoursCompleted, hoursGoal, pct, certificates, loading: loadingDash } = useDashboard()
+    const router = useRouter()
+    const { user, isLoaded } = useUser()
+    const [matches, setMatches] = useState<Match[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        if (!isLoaded || !user) return
+        const fetchMatches = async () => {
+            try {
+                const res = await fetch(`${API}/api/matching/${user.id}`)
+                const data = await res.json()
+                if (!res.ok) { setError(data.error || 'Failed to load matches'); return }
+                setMatches(data.matches || [])
+            } catch {
+                setError('Could not connect to server.')
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchMatches()
+    }, [isLoaded, user])
+
+
+
+
+    const allCerts = [
+        { title: 'Beginner Volunteer', earned: true },
+        { title: '10 Hours Logged', earned: hoursCompleted >= 10 },
+        ...certificates.map((c: Certificate) => ({ title: c.title, earned: true })),
+        ...LOCKED_CERTS,
+    ].slice(0, 6)
+
+    return (
+        <div className={styles.page}>
+            <div className={styles.blobTopRight} />
+            <div className={styles.blobBottomRight} />
+            <div className={styles.blobCenter} />
+
+            {/* Header */}
+            <header className={styles.header}>
+                <div className={styles.logo}>
+                    <div className={styles.logoMark}>🌱</div>
+                    <span className={styles.logoText}>Let's Soil</span>
                 </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-    </main>
-  )
+                <div className={styles.notifBadge}>
+                    <IconFlame />
+                    <span>7</span>
+                </div>
+            </header>
+
+            <main className={styles.main}>
+
+                {/* Greeting */}
+                <div className={styles.greeting}>
+                    <h1 className={styles.greetingName}>
+                        Hey{firstName ? `, ${firstName}` : ''}!
+                    </h1>
+                    <p className={styles.greetingSub}>Keep growing — you're doing amazing.</p>
+                </div>
+
+                {/* Stats */}
+                <div className={styles.statsRow}>
+                    <div className={styles.statCard}>
+                        <div className={styles.statIcon}><IconCalendar /></div>
+                        <div className={styles.statBody}>
+                            <div className={styles.statValue}>8</div>
+                            <div className={styles.statLabel}>Events Attended</div>
+                        </div>
+                    </div>
+
+                    <div className={styles.statCard}>
+                        <div className={styles.statIcon}><IconAward /></div>
+                        <div className={styles.statBody}>
+                            <div className={styles.statValue}>{loadingDash ? '—' : certificates.length || 2}</div>
+                            <div className={styles.statLabel}>Certifications</div>
+                        </div>
+                    </div>
+
+                    <div className={`${styles.statCard} ${styles.statCardWide}`}>
+                        <div className={styles.statIcon}><IconClock color="#A59A92" /></div>
+                        <div className={styles.statBody}>
+                            <div className={styles.statValue}>{loadingDash ? '—' : hoursCompleted || 24}</div>
+                            <div className={styles.progressBar}>
+                                <div className={styles.progressFill} style={{ width: `${loadingDash ? 0 : pct}%` }} />
+                            </div>
+                            <div className={styles.statLabel}>Hours Logged</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Top 5 Matches */}
+                <div className={styles.matchesCard}>
+                    <div className={styles.matchesHeader}>
+                        <IconTrophy />
+                        <span className={styles.matchesTitle}>Your Top 5 Matches</span>
+                    </div>
+                    <div className={styles.matchesList}>
+                        <div className={styles.matchesInner}>
+                            {loading && <p style={{ color: '#A59A92', fontSize: '0.85rem' }}>Finding your matches…</p>}
+                            {error && <p style={{ color: '#cc0000', fontSize: '0.85rem' }}>{error}</p>}
+                            {!loading && !error && matches.map(({ opportunity: opp, matchPercentage }, index) => (
+                                <div key={opp._id} className={styles.oppCard}>
+                                    <div className={styles.oppLogo}>
+                                        #{index + 1}
+                                    </div>
+                                    <div className={styles.oppContent}>
+                                        <div className={styles.oppMeta}>
+                                            <span className={styles.oppRankLabel}>#{index + 1} Match · {matchPercentage}%</span>
+                                            <span className={styles.oppCategory}>{opp.causeArea}</span>
+                                        </div>
+                                        <h3 className={styles.oppTitle}>{opp.title}</h3>
+                                        <p className={styles.oppDesc}>{opp.description}</p>
+                                        <div className={styles.oppDetails}>
+                                            <span className={styles.oppDetail}><IconMapPin />{opp.location}</span>
+                                            <span className={styles.oppDetail}>{opp.commitmentType}</span>
+                                            {opp.isRemote && <span className={styles.oppDetail}>Remote</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <a href="/opportunities" className={styles.browseBtn}>
+                                <span>Browse all opportunities</span>
+                                <IconArrowRight />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Certifications */}
+                <section className={styles.section}>
+                    <h2 className={styles.sectionTitle}>
+                        <IconAward color="#F4873E" />
+                        Certifications
+                    </h2>
+                    <div className={styles.certsRow}>
+                        {allCerts.map((c, i) => (
+                            <div key={i} className={`${styles.certCard} ${!c.earned ? styles.certLocked : ''}`}>
+                                <div className={`${styles.certIconWrap} ${!c.earned ? styles.certIconLocked : ''}`}>
+                                    {!c.earned ? <IconLock /> : <IconAward color="#D99D26" />}
+                                </div>
+                                <p className={styles.certTitle}>{c.title}</p>
+                                <div className={styles.certStatus}>
+                                    {!c.earned
+                                        ? <><IconLockSmall /><span>Locked</span></>
+                                        : <><IconCheck /><span>Earned</span></>
+                                    }
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Recent Activity */}
+                <section className={styles.section}>
+                    <h2 className={styles.sectionTitle}>
+                        <IconCalendar />
+                        Recent Activity
+                    </h2>
+                    <div className={styles.activityList}>
+                        {ACTIVITY.map((item, i) => (
+                            <div key={i} className={styles.activityRow}>
+                                <div className={styles.activityIcon}>
+                                    <IconTrophy color={item.color} />
+                                </div>
+                                <div className={styles.activityInfo}>
+                                    <p className={styles.activityTitle}>{item.title}</p>
+                                    <p className={styles.activityMeta}>{item.org} · {item.date}</p>
+                                </div>
+                                <div className={styles.activityHours}>{item.hours}</div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+
+
+            </main>
+        </div>
+    )
 }

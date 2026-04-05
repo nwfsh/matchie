@@ -1,0 +1,559 @@
+.page {
+    --pampas: #F7F5F2;
+    --dawn-pink: #F1E9E4;
+    --white: #FFFFFF;
+    --finlandia: #4D6F53;
+    --millbrook: #634D36;
+    --shadow: #896B4D;
+    --zorba: #A59A92;
+    --calico: #E0B094;
+    --jaffa: #F4873E;
+    --olivine: #A1C280;
+    --golden: #D99D26;
+    --bermuda: #7091A9;
+    --radius-xl: 24px;
+    --shadow-card: 0px 4px 14px rgba(106, 82, 52, 0.08);
+
+    min-height: 100vh;
+    background: var(--pampas);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    isolation: isolate;
+    padding: 0 0 96px;
+}
+
+/* center the whole dashboard like the figma frame */
+.header,
+.main {
+    width: min(100%, 1248px);
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px 0;
+    min-height: 64px;
+}
+
+.main {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 12px 24px 0;
+}
+
+/* greeting */
+.greeting {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.greetingName {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 7vw, 96px);
+    line-height: 0.95;
+    color: var(--finlandia);
+    margin: 0;
+}
+
+.greetingSub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--shadow);
+    margin: 0;
+}
+
+/* stats row should not over-stretch */
+.statsRow {
+    display: grid;
+    grid-template-columns: 155px 155px minmax(0, 1fr);
+    gap: 14px;
+    align-items: stretch;
+    width: 100%;
+}
+
+.statCard {
+    background: var(--white);
+    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+    box-sizing: border-box;
+}
+
+.statCardWide {
+    min-width: 0;
+}
+
+.statBody {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 8px;
+    min-width: 0;
+}
+
+.statValue {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 45px;
+    color: var(--finlandia);
+}
+
+.statLabel {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--zorba);
+}
+
+.progressBar {
+    width: 100%;
+    height: 10px;
+    background: #e6dfdb;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #F4873E 0%, #A1C280 100%);
+    min-width: 10px;
+}
+
+/* top matches card */
+.matchesCard {
+    width: 100%;
+    background: var(--dawn-pink);
+    border: 1px solid var(--calico);
+    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.matchesHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.matchesTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    color: var(--finlandia);
+}
+
+.matchesProgress {
+    width: 100%;
+    height: 12px;
+    background: #EBE4E0;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.matchesProgressFill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #F4873E 0%, #A1C280 48.19%);
+    border-radius: 999px;
+}
+
+/* inner list area should look like the figma panel, not huge */
+.matchesList {
+    width: 100%;
+    background: var(--pampas);
+    border-radius: 16px;
+    max-height: 660px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.matchesInner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.oppCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    background: var(--white);
+    border: 1px solid rgba(224, 176, 148, 0.5);
+    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+    padding: 16px 18px;
+    box-sizing: border-box;
+}
+
+.oppContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.oppTitle,
+.oppOrg,
+.oppDesc {
+    max-width: 100%;
+}
+
+/* smaller screens */
+@media (max-width: 900px) {
+
+    .header,
+    .main {
+        width: 100%;
+    }
+
+    .statsRow {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .statCardWide {
+        grid-column: 1 / -1;
+    }
+
+    .greetingName {
+        font-size: clamp(42px, 10vw, 72px);
+    }
+
+    .matchesCard {
+        padding: 16px;
+    }
+
+    .matchesInner {
+        padding: 14px;
+    }
+}
+
+
+
+/* ── Sections ────────────────────────────────────────────────────────────────── */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    color: var(--finlandia);
+    margin: 0;
+}
+
+/* ── Certifications ──────────────────────────────────────────────────────────── */
+.certsRow {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+}
+
+.certsRow::-webkit-scrollbar {
+    display: none;
+}
+
+.certCard {
+    flex-shrink: 0;
+    width: 230px;
+    background: var(--white);
+    border: 1px solid rgba(161, 194, 128, 0.3);
+    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.certLocked {
+    opacity: 0.5;
+    border-color: var(--calico);
+}
+
+.certIconWrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background: rgba(244, 135, 62, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.certIconLocked {
+    background: #EBE4E0;
+}
+
+.certTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--finlandia);
+    text-align: center;
+    margin: 4px 0 0;
+}
+
+.certStatus {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 15px;
+    color: var(--zorba);
+}
+
+/* ── Activity ────────────────────────────────────────────────────────────────── */
+.activityList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.activityRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--white);
+    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+}
+
+.activityIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background: rgba(244, 135, 62, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.activityInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.activityTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--millbrook);
+    margin: 0;
+}
+
+.activityMeta {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--zorba);
+    margin: 0;
+}
+
+.activityHours {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--finlandia);
+    text-align: right;
+}
+
+/* ── Browse btn ──────────────────────────────────────────────────────────────── */
+.browseBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 17px 24px;
+    background: var(--jaffa);
+    box-shadow: 0px 2px 8px rgba(245, 140, 69, 0.18);
+    border-radius: 999px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-top: 4px;
+}
+
+.browseBtn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.browseBtn span {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--white);
+}
+
+/* ── Opp card additions ───────────────────────────────────────────────────────── */
+.oppCard {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.oppCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 8px 24px rgba(106, 82, 52, 0.13);
+}
+
+.oppLogo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 1px solid rgba(224, 176, 148, 0.3);
+}
+
+.oppMeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+    flex-wrap: wrap;
+}
+
+.oppRankLabel {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--jaffa);
+}
+
+.oppCategory {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    color: var(--finlandia);
+    background: rgba(161, 194, 128, 0.15);
+    border-radius: 999px;
+    padding: 2px 6px;
+}
+
+.oppTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--finlandia);
+    margin: 0;
+}
+
+.oppOrg {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--zorba);
+    margin: 0;
+}
+
+.oppDesc {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--shadow);
+    margin: 4px 0;
+}
+
+.oppDetails {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.oppDetail {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--zorba);
+}
+
+/* ── CTA ─────────────────────────────────────────────────────────────────────── */
+.ctaBanner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px;
+    background: rgba(244, 135, 62, 0.1);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ctaBanner:hover {
+    background: rgba(244, 135, 62, 0.16);
+}
+
+.ctaTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 28px;
+    color: var(--finlandia);
+    margin: 0;
+}
+
+.ctaSub {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--shadow);
+    margin: 0;
+}
