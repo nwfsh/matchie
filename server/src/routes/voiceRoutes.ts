@@ -4,20 +4,23 @@ import fs from "fs"
 import dotenv from "dotenv"
 import FormData from "form-data"
 import axios from "axios"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import Groq from "groq-sdk"
 import Opportunity from "../models/Opportunity"
 
 dotenv.config()
 
 const router = express.Router()
 const upload = multer({ dest: "uploads/" })
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-// ── Parse transcript into structured opportunity fields via Gemini ─────────────
-async function parseTranscriptWithGemini(transcript: string) {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
-
-  const prompt = `You are parsing a volunteer opportunity description spoken aloud by a nonprofit.
+// ── Parse transcript into structured opportunity fields via Groq ──────────────
+async function parseTranscriptWithGroq(transcript: string) {
+  const completion = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      {
+        role: "user",
+        content: `You are parsing a volunteer opportunity description spoken aloud by a nonprofit.
 Extract the following fields and return ONLY valid JSON — no markdown, no explanation, no backticks.
 
 Transcript: "${transcript}"
@@ -32,11 +35,12 @@ Return exactly this JSON shape:
   "commitmentType": "one of: Weekly, One-time, Flexible",
   "location": "city or neighbourhood mentioned, default to 'Vancouver' if not mentioned",
   "isRemote": false
-}`
+}`,
+      },
+    ],
+  })
 
-  const result = await model.generateContent(prompt)
-  const raw = result.response.text()
-
+  const raw = completion.choices[0]?.message?.content || ""
   try {
     const clean = raw.replace(/```json|```/g, "").trim()
     return JSON.parse(clean)
@@ -65,8 +69,8 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
     if (!process.env.ELEVENLABS_API_KEY) {
       return res.status(500).json({ message: "ELEVENLABS_API_KEY missing in .env" })
     }
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ message: "GEMINI_API_KEY missing in .env" })
+    if (!process.env.GROQ_API_KEY) {
+      return res.status(500).json({ message: "GROQ_API_KEY missing in .env" })
     }
 
     // STEP 1 — Rename temp file to .webm so ElevenLabs recognises the format
@@ -80,7 +84,7 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
     })
     formData.append("model_id", "scribe_v1")
 
-    // Use axios instead of fetch — handles multipart correctly with node form-data
+    // axios handles multipart correctly with node form-data
     const elevenRes = await axios.post(
       "https://api.elevenlabs.io/v1/speech-to-text",
       formData,
@@ -99,8 +103,8 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
 
     console.log("TRANSCRIPT:", transcript)
 
-    // STEP 2 — Gemini extracts structured fields from transcript
-    const parsed = await parseTranscriptWithGemini(transcript)
+    // STEP 2 — Groq extracts structured fields from transcript
+    const parsed = await parseTranscriptWithGroq(transcript)
     console.log("PARSED:", parsed)
 
     // STEP 3 — Save to MongoDB
