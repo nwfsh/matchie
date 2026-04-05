@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface Opportunity {
   _id: string
@@ -24,6 +25,8 @@ export default function NonprofitUploadPage() {
   const [transcript, setTranscript] = useState('')
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null)
   const recorderRef = useRef<MediaRecorder | null>(null)
+
+  const router = useRouter()
 
   const startRecording = async () => {
     try {
@@ -304,6 +307,20 @@ export default function NonprofitUploadPage() {
           50% { opacity: 0.2; }
         }
 
+        .btn-exit {
+          width: 100%;
+          background: transparent;
+          border: 1.5px solid #d4c5a9;
+          color: #7a6b52;
+          justify-content: center;
+          border-radius: 14px;
+          padding: 0.9rem;
+          margin-top: 0.6rem;
+        }
+        .btn-exit:hover {
+          background: rgba(212, 197, 169, 0.2);
+        }
+
         /* Success */
         .transcript-card {
            background: #fef9ec;
@@ -550,6 +567,12 @@ export default function NonprofitUploadPage() {
 
               <button className="btn btn-reset" onClick={reset}>
                 + Post another opportunity
+              </button>
+               <button 
+                className="btn btn-exit"
+                onClick={() => router.push('/')}
+              >
+                Exit to Home
               </button>
             </>
           )}
