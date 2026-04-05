@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
 export interface IStudentProfile extends Document {
+    clerkId: string  
     name: string
     age: number
     school?: string
@@ -9,10 +10,17 @@ export interface IStudentProfile extends Document {
     hoursPerYear?: number
     createdAt: Date
     updatedAt: Date
+
 }
 
 const StudentProfileSchema = new Schema<IStudentProfile>(
     {
+        clerkId: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true,
+        },
         name: {
             type: String,
             required: true,
@@ -50,8 +58,10 @@ const StudentProfileSchema = new Schema<IStudentProfile>(
 
 // No indexes needed — this collection is only ever fetched by _id for dashboard display
 
+
 const StudentProfile: Model<IStudentProfile> =
     mongoose.models.StudentProfile ??
     mongoose.model<IStudentProfile>('StudentProfile', StudentProfileSchema)
 
 export default StudentProfile
+
