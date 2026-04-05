@@ -91,7 +91,6 @@ const StudentQuizSchema = new Schema<IStudentQuiz>(
 // ── Compound index for the core matching query ─────────────────────────────
 // Most match queries will filter on cause + availability + task together,
 // so a compound index on these three is more efficient than three separate ones
-StudentQuizSchema.index({ cause: 1, availability: 1, task: 1 })
 
 // ── Compound index for org-side filtering ─────────────────────────────────
 // Orgs may filter by energy + onboarding to find students who suit their pace
