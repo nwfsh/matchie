@@ -5,7 +5,6 @@ export interface IStudentQuiz extends Document {
     profileId: mongoose.Types.ObjectId
 
     // Single-select answers
-    goal: 'hours' | 'resume' | 'skills' | 'community'
     energy: 'chill' | 'moderate' | 'fast-paced'
     social: 'solo' | 'small' | 'big'
     task: 'people' | 'creative' | 'background' | 'physical'
@@ -15,10 +14,15 @@ export interface IStudentQuiz extends Document {
     cause: string[]
     skills: string[]
     availability: string[]
+    goal: string[]
 
     completedAt: Date
     createdAt: Date
     updatedAt: Date
+
+    cause_extra: { type: String, default: '' },
+    goal_extra: { type: String, default: '' },
+    skills_extra: { type: String, default: '' },
 }
 
 const StudentQuizSchema = new Schema<IStudentQuiz>(
@@ -31,7 +35,7 @@ const StudentQuizSchema = new Schema<IStudentQuiz>(
 
         // Single-select — indexed individually since matching filters on these
         goal: {
-            type: String,
+            type: [String],
             required: true,
             enum: ['hours', 'resume', 'skills', 'community'],
             index: true,

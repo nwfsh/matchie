@@ -179,6 +179,7 @@ export default function DashboardPage() {
     const [matches, setMatches] = useState<Match[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const [applied, setApplied] = useState<string | null>(null)
 
     useEffect(() => {
         if (!isLoaded || !user) return
@@ -232,7 +233,7 @@ export default function DashboardPage() {
                     <h1 className={styles.greetingName}>
                         Hey{firstName ? `, ${firstName}` : ''}!
                     </h1>
-                    <p className={styles.greetingSub}>Keep growing — you're doing amazing.</p>
+                    <p className={styles.greetingSub}>Glad to see you back!</p>
                 </div>
 
                 {/* Stats */}
@@ -240,7 +241,7 @@ export default function DashboardPage() {
                     <div className={styles.statCard}>
                         <div className={styles.statIcon}><IconCalendar /></div>
                         <div className={styles.statBody}>
-                            <div className={styles.statValue}>8</div>
+                            <div className={styles.statValue}>0</div>
                             <div className={styles.statLabel}>Events Attended</div>
                         </div>
                     </div>
@@ -248,7 +249,7 @@ export default function DashboardPage() {
                     <div className={styles.statCard}>
                         <div className={styles.statIcon}><IconAward /></div>
                         <div className={styles.statBody}>
-                            <div className={styles.statValue}>{loadingDash ? '—' : certificates.length || 2}</div>
+                            <div className={styles.statValue}>{loadingDash ? '—' : certificates.length || 1}</div>
                             <div className={styles.statLabel}>Certifications</div>
                         </div>
                     </div>
@@ -256,7 +257,10 @@ export default function DashboardPage() {
                     <div className={`${styles.statCard} ${styles.statCardWide}`}>
                         <div className={styles.statIcon}><IconClock color="#A59A92" /></div>
                         <div className={styles.statBody}>
-                            <div className={styles.statValue}>{loadingDash ? '—' : hoursCompleted || 24}</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                                <div className={styles.statValue} style={{ textAlign: 'right' }}>{loadingDash ? '—' : hoursCompleted || 0}</div>
+                                <div style={{ fontSize: '0.85rem', color: '#A59A92', fontWeight: '600' }}>/ {hoursGoal || 24}</div>
+                            </div>
                             <div className={styles.progressBar}>
                                 <div className={styles.progressFill} style={{ width: `${loadingDash ? 0 : pct}%` }} />
                             </div>

@@ -17,12 +17,13 @@ function buildStudentParagraph(quiz: any): string {
     education: 'education like tutoring, mentoring and literacy',
     unsure: 'any cause they find meaningful',
   }
-  const goalMap: Record<string, string> = {
-    hours: 'completing their graduation volunteer hours',
-    resume: 'building their resume and university applications',
-    skills: 'learning and growing through real-world experience',
-    community: 'genuinely giving back and making a difference',
-  }
+
+    const goalMap: Record<string, string> = {
+        hours: 'completing their graduation volunteer hours',
+        resume: 'building their resume and university applications',
+        skills: 'learning and growing through real-world experience',
+        community: 'genuinely giving back and making a difference',
+    }
   const energyMap: Record<string, string> = {
     chill: 'a chill and low-key environment with no pressure',
     moderate: 'a steady and manageable pace',
@@ -46,17 +47,26 @@ function buildStudentParagraph(quiz: any): string {
     depends: 'flexible onboarding depending on the role',
   }
 
-  const causes = (quiz.cause as string[]).map(c => causeMap[c] || c).join(' and ')
-  const skills = (quiz.skills as string[]).join(', ')
-  const availability = (quiz.availability as string[]).join(', ')
+    const causes = (quiz.cause as string[]).map(c => causeMap[c] || c).join(' and ')
+    const skills = (quiz.skills as string[]).join(', ')
+    const availability = (quiz.availability as string[]).join(', ')
+    const goals = Array.isArray(quiz.goal)
+        ? (quiz.goal as string[]).map(g => goalMap[g] || g).join(' and ')
+        : goalMap[quiz.goal] || quiz.goal
 
-  return `This volunteer is passionate about ${causes}. 
-Their main goal is ${goalMap[quiz.goal] || quiz.goal}. 
+    let paragraph = `This volunteer is passionate about ${causes}. 
+Their main goal is ${goals}.
 They prefer ${energyMap[quiz.energy] || quiz.energy} and enjoy ${socialMap[quiz.social] || quiz.social}. 
 They are best suited to ${taskMap[quiz.task] || quiz.task}. 
 They want to build skills in ${skills}. 
 They are available ${availability}. 
 They prefer ${onboardingMap[quiz.onboarding] || quiz.onboarding}.`
+
+    if (quiz.cause_extra) paragraph += `\nMore about their cause interests: ${quiz.cause_extra}`
+    if (quiz.goal_extra) paragraph += `\nMore about their goals: ${quiz.goal_extra}`
+    if (quiz.skills_extra) paragraph += `\nMore about their skills: ${quiz.skills_extra}`
+
+    return paragraph
 }
 
 // Convert opportunity into a natural language paragraph 
