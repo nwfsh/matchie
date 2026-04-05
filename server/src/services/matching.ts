@@ -1,1 +1,0 @@
-cd ~/Documents/PROJECTS / matchie - 1
