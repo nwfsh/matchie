@@ -136,6 +136,51 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
       error: error?.response?.data || String(error),
     })
   }
+  
 })
+// Add this route to your existing opportunityRoutes file, just before `export default router`
+// It reuses parseTranscriptWithGroq since text and transcript are treated identically.
 
+// ── POST /api/opportunities/text ──────────────────────────────────────────────
+router.post("/text", async (req, res) => {
+  try {
+    const { description } = req.body
+
+    if (!description || !String(description).trim()) {
+      return res.status(400).json({ message: "No description provided." })
+    }
+    if (!process.env.GROQ_API_KEY) {
+      return res.status(500).json({ message: "GROQ_API_KEY missing in .env" })
+    }
+
+    const transcript = String(description).trim()
+
+    // Reuse the same Groq extractor — text input is treated like a transcript
+    const parsed = await parseTranscriptWithGroq(transcript)
+    console.log("TEXT PARSED:", parsed)
+
+    const opportunity = await Opportunity.create({
+      title: parsed.title,
+      causeArea: parsed.causeArea,
+      description: parsed.description,
+      requiredSkills: parsed.requiredSkills,
+      responsibilities: parsed.responsibilities,
+      commitmentType: parsed.commitmentType,
+      location: parsed.location,
+      isRemote: parsed.isRemote,
+    })
+
+    return res.status(201).json({
+      message: "Opportunity saved successfully",
+      transcript,       // echoed back so the UI can show "What we received"
+      opportunity,
+    })
+  } catch (error: any) {
+    console.error("Text route error:", error)
+    return res.status(500).json({
+      message: "Failed to process description",
+      error: String(error),
+    })
+  }
+})
 export default router
