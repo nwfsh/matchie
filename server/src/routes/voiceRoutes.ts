@@ -3,6 +3,7 @@ import multer from "multer"
 import fs from "fs"
 import dotenv from "dotenv"
 import FormData from "form-data"
+import axios from "axios"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import Opportunity from "../models/Opportunity"
 
@@ -14,7 +15,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
 
 // ── Parse transcript into structured opportunity fields via Gemini ─────────────
 async function parseTranscriptWithGemini(transcript: string) {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
 
   const prompt = `You are parsing a volunteer opportunity description spoken aloud by a nonprofit.
 Extract the following fields and return ONLY valid JSON — no markdown, no explanation, no backticks.
@@ -55,6 +56,8 @@ Return exactly this JSON shape:
 
 // ── POST /api/opportunities/voice ─────────────────────────────────────────────
 router.post("/voice", upload.single("audio"), async (req, res) => {
+  let renamedPath: string | null = null
+
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No audio file uploaded." })
@@ -66,9 +69,8 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
       return res.status(500).json({ message: "GEMINI_API_KEY missing in .env" })
     }
 
-    // STEP 1 — Send audio to ElevenLabs speech-to-text
-    // Rename temp file to .webm so ElevenLabs recognises the format
-    const renamedPath = req.file.path + ".webm"
+    // STEP 1 — Rename temp file to .webm so ElevenLabs recognises the format
+    renamedPath = req.file.path + ".webm"
     fs.renameSync(req.file.path, renamedPath)
 
     const formData = new FormData()
@@ -78,30 +80,30 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
     })
     formData.append("model_id", "scribe_v1")
 
-    const elevenRes = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
-      method: "POST",
-      headers: {
-        "xi-api-key": process.env.ELEVENLABS_API_KEY,
-        ...formData.getHeaders(),
-      },
-      body: formData as any,
-    })
+    // Use axios instead of fetch — handles multipart correctly with node form-data
+    const elevenRes = await axios.post(
+      "https://api.elevenlabs.io/v1/speech-to-text",
+      formData,
+      {
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          ...formData.getHeaders(),
+        },
+      }
+    )
 
-    const elevenData = await elevenRes.json()
-
-    if (!elevenRes.ok) {
-      throw new Error(elevenData?.detail || "ElevenLabs transcription failed")
-    }
-
-    const transcript: string = elevenData.text || ""
+    const transcript: string = elevenRes.data?.text || ""
     if (!transcript.trim()) {
       return res.status(400).json({ message: "Could not transcribe audio. Please speak clearly and try again." })
     }
 
+    console.log("TRANSCRIPT:", transcript)
+
     // STEP 2 — Gemini extracts structured fields from transcript
     const parsed = await parseTranscriptWithGemini(transcript)
+    console.log("PARSED:", parsed)
 
-    // STEP 3 — Save to MongoDB using your Opportunity model
+    // STEP 3 — Save to MongoDB
     const opportunity = await Opportunity.create({
       title: parsed.title,
       causeArea: parsed.causeArea,
@@ -113,7 +115,6 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
       isRemote: parsed.isRemote,
     })
 
-    // Cleanup temp upload file
     fs.unlinkSync(renamedPath)
 
     return res.status(201).json({
@@ -121,14 +122,14 @@ router.post("/voice", upload.single("audio"), async (req, res) => {
       transcript,
       opportunity,
     })
-  } catch (error) {
-    console.error("Voice route error:", error)
-    if (req.file && fs.existsSync(req.file.path)) {
+  } catch (error: any) {
+    console.error("Voice route error:", error?.response?.data || error)
+    if (renamedPath && fs.existsSync(renamedPath)) {
       fs.unlinkSync(renamedPath)
     }
     return res.status(500).json({
       message: "Failed to process audio",
-      error: String(error),
+      error: error?.response?.data || String(error),
     })
   }
 })
