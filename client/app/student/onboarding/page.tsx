@@ -131,7 +131,7 @@ export default function Onboarding() {
                     </div>
 
                     <div className={styles.field}>
-                        <label className={styles.label}>Hours you can give this year</label>
+                        <label className={styles.label}>Hours you want to aim for volunteering this year </label>
                         <input
                             className={styles.input}
                             name="hoursPerYear"
